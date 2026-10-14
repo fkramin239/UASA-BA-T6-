@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ms" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kembara Bahasa Arab Tahun 6 UASA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .arabic-text {
+            font-family: 'Amiri', serif;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.5); }
+            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.8); }
+        }
+        .pulse-box {
+            animation: pulse-glow 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-blue-900 min-h-screen text-white flex flex-col justify-between select-none">
+
+    <header class="w-full bg-white/10 backdrop-blur-md border-b border-white/20 py-4 px-6 flex justify-between items-center shadow-lg">
+        <div class="flex items-center space-x-3">
+            <div class="bg-yellow-400 text-purple-950 p-2.5 rounded-2xl font-extrabold text-xl shadow-md flex items-center justify-center w-12 h-12">
+                <i class="fa-solid fa-star"></i>
+            </div>
+            <div>
+                <h1 class="text-xl md:text-2xl font-extrabold tracking-wide text-yellow-300">Kembara Bahasa Arab T6</h1>
+                <p class="text-xs text-blue-200">Ujian Akhir Sesi Akademik (UASA)</p>
+            </div>
+        </div>
+        <div class="flex items-center space-x-4">
+            <button id="bgMusicToggle" onclick="toggleBackgroundMusic()" class="bg-white/20 hover:bg-white/30 p-2.5 rounded-full transition transform hover:scale-110 flex items-center justify-center w-10 h-10 text-yellow-300" title="Muzik Latar">
+                <i id="musicIcon" class="fa-solid fa-music"></i>
+            </button>
+            <div id="playerBadge" class="hidden bg-purple-700/80 px-4 py-2 rounded-xl border border-purple-400/40 text-sm font-semibold flex items-center space-x-2">
+                <i class="fa-solid fa-user-graduate text-yellow-300"></i>
+                <span id="navPlayerName"></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-4 md:p-6 max-w-4xl mx-auto w-full">
+
+        <!-- Screen 1: Registration Form -->
+        <div id="screen-register" class="w-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 md:p-10 shadow-2xl animate-fade-in text-center">
+            <div class="inline-block bg-yellow-400 text-indigo-950 p-4 rounded-full text-3xl mb-4 animate-float shadow-lg">
+                <i class="fa-solid fa-graduation-cap"></i>
+            </div>
+            <h2 class="text-2xl md:text-4xl font-extrabold text-white mb-2">Selamat Datang, Murid Cemerlang!</h2>
+            <p class="text-blue-200 mb-8 text-sm md:text-base">Sila masukkan maklumat diri anda sebelum memulakan cabaran.</p>
+
+            <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-5 text-left max-w-md mx-auto">
+                <div>
+                    <label class="block text-sm font-semibold mb-2 text-yellow-300"><i class="fa-solid fa-user mr-2"></i> Nama Penuh:</label>
+                    <input type="text" id="inputName" required placeholder="Cth: Ahmad bin Abdullah" class="w-full bg-white/20 border border-white/30 rounded-2xl px-4 py-3 text-white placeholder-blue-200/60 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold mb-2 text-yellow-300"><i class="fa-solid fa-school mr-2"></i> Kelas:</label>
+                    <input type="text" id="inputClass" required placeholder="Cth: 6 Cemerlang" class="w-full bg-white/20 border border-white/30 rounded-2xl px-4 py-3 text-white placeholder-blue-200/60 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                </div>
+                <div class="pt-4 flex flex-col sm:flex-row gap-3">
+                    <button type="submit" class="flex-1 bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-indigo-950 font-extrabold py-4 px-6 rounded-2xl shadow-lg transform hover:-translate-y-1 transition duration-200 flex items-center justify-center space-x-2">
+                        <span>Mula Bermain</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <button type="button" onclick="showLeaderboard()" class="bg-white/20 hover:bg-white/30 font-bold py-4 px-6 rounded-2xl transition flex items-center justify-center space-x-2 border border-white/20">
+                        <i class="fa-solid fa-trophy text-yellow-400"></i>
+                        <span>Papan Pendahulu</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Screen 2: Game Dashboard / Menu -->
+        <div id="screen-menu" class="hidden w-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 md:p-10 shadow-2xl text-center">
+            <h2 class="text-2xl md:text-3xl font-extrabold text-yellow-300 mb-2">Pilih Mod Permainan</h2>
+            <p class="text-blue-200 mb-8">Uji kefahaman Bahasa Arab UASA Tahun 6 anda melalui soalan interaktif!</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-xl mx-auto mb-8">
+                <button onclick="startQuiz()" class="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 p-6 rounded-2xl shadow-xl flex flex-col items-center justify-center space-y-3 transform hover:scale-105 transition duration-200 border border-emerald-400/30">
+                    <i class="fa-solid fa-gamepad text-4xl text-yellow-300"></i>
+                    <span class="text-xl font-bold">Mula Kuiz UASA</span>
+                    <span class="text-xs text-emerald-100">Set Soalan Lengkap UASA</span>
+                </button>
+                <button onclick="showLeaderboard()" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 p-6 rounded-2xl shadow-xl flex flex-col items-center justify-center space-y-3 transform hover:scale-105 transition duration-200 border border-purple-400/30">
+                    <i class="fa-solid fa-ranking-star text-4xl text-yellow-300"></i>
+                    <span class="text-xl font-bold">Papan Pendahulu</span>
+                    <span class="text-xs text-purple-100">Lihat Senarai Markah</span>
+                </button>
+            </div>
+            
+            <button onclick="logoutPlayer()" class="text-sm text-blue-300 hover:text-white underline">
+                <i class="fa-solid fa-arrow-rotate-left mr-1"></i> Tukar Profil Pemain
+            </button>
+        </div>
+
+        <!-- Screen 3: Quiz Gameplay Screen -->
+        <div id="screen-game" class="hidden w-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 md:p-8 shadow-2xl">
+            <!-- Game Top Status Bar -->
+            <div class="flex justify-between items-center mb-6 bg-black/20 p-4 rounded-2xl border border-white/10">
+                <div>
+                    <span id="questionCategory" class="bg-yellow-400 text-indigo-950 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Bahagian A</span>
+                    <p class="text-xs text-blue-200 mt-1">Soalan <span id="currentQNum">1</span> dari <span id="totalQNum">10</span></p>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="text-right">
+                        <span class="text-xs text-blue-200 block">Markah Semasa</span>
+                        <span id="currentScore" class="text-xl font-extrabold text-yellow-300">0</span>
+                    </div>
+                    <button onclick="pauseGame()" class="bg-white/20 hover:bg-white/30 p-2.5 rounded-xl transition text-yellow-300" title="Berhenti / Simpan">
+                        <i class="fa-solid fa-pause"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-white/20 h-3 rounded-full mb-6 overflow-hidden">
+                <div id="progressBar" class="bg-gradient-to-r from-yellow-400 to-amber-500 h-full w-0 transition-all duration-300"></div>
+            </div>
+
+            <!-- Question Box -->
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-6 mb-6 text-center">
+                <h3 id="questionInstruction" class="text-lg font-semibold text-blue-200 mb-3">Arahan Soalan</h3>
+                <div id="questionContent" class="text-3xl md:text-4xl font-bold text-white arabic-text py-4">
+                    <!-- Soalan Arab -->
+                </div>
+            </div>
+
+            <!-- Options / Answer Area -->
+            <div id="optionsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <!-- Pilihan Jawapan Dinamik -->
+            </div>
+
+            <!-- Feedback Message Box -->
+            <div id="feedbackBox" class="mt-6 hidden p-4 rounded-2xl text-center font-bold text-lg animate-bounce">
+                <!-- Betul / Salah -->
+            </div>
+        </div>
+
+        <!-- Screen 4: Result Screen -->
+        <div id="screen-result" class="hidden w-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 md:p-10 shadow-2xl text-center">
+            <div class="inline-block bg-yellow-400 text-indigo-950 p-5 rounded-full text-4xl mb-4 animate-bounce shadow-lg">
+                <i class="fa-solid fa-award"></i>
+            </div>
+            <h2 class="text-3xl font-extrabold text-white mb-2">Tahniah! Kuiz Selesai</h2>
+            <p class="text-blue-200 mb-6">Keputusan Pentaksiran Akhir Sesi Akademik Bahasa Arab Tahun 6</p>
+
+            <div class="bg-black/30 p-6 rounded-2xl border border-white/20 max-w-sm mx-auto mb-8 space-y-2">
+                <p class="text-sm text-blue-300">Nama: <strong id="resName" class="text-white"></strong></p>
+                <p class="text-sm text-blue-300">Kelas: <strong id="resClass" class="text-white"></strong></p>
+                <div class="border-t border-white/10 pt-4 mt-4">
+                    <span class="text-xs text-blue-300 uppercase tracking-widest block">Markah Keseluruhan</span>
+                    <span id="resScore" class="text-4xl font-black text-yellow-300">0 / 100</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="restartQuiz()" class="bg-gradient-to-r from-yellow-400 to-amber-500 hover:from-yellow-300 hover:to-amber-400 text-indigo-950 font-bold py-3 px-6 rounded-xl shadow-lg transition transform hover:-translate-y-0.5">
+                    <i class="fa-solid fa-rotate-right mr-2"></i> Cuba Semula
+                </button>
+                <button onclick="showLeaderboard()" class="bg-white/20 hover:bg-white/30 font-bold py-3 px-6 rounded-xl transition border border-white/20">
+                    <i class="fa-solid fa-trophy text-yellow-400 mr-2"></i> Papan Pendahulu
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 5: Leaderboard Screen -->
+        <div id="screen-leaderboard" class="hidden w-full bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 md:p-8 shadow-2xl">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-extrabold text-yellow-300 flex items-center">
+                    <i class="fa-solid fa-trophy mr-3 text-yellow-400"></i> Papan Pendahulu Murid
+                </h2>
+                <button onclick="backToMenu()" class="bg-white/20 hover:bg-white/30 px-4 py-2 rounded-xl text-sm font-bold transition">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+                </button>
+            </div>
+
+            <div class="overflow-x-auto max-h-96 overflow-y-auto rounded-2xl border border-white/10 bg-black/20">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-white/10 border-b border-white/10 text-yellow-300 text-sm">
+                            <th class="p-3 text-center">No.</th>
+                            <th class="p-3">Nama</th>
+                            <th class="p-3">Kelas</th>
+                            <th class="p-3 text-center">Markah</th>
+                            <th class="p-3 text-center">Tarikh</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboardTableBody" class="text-sm divide-y divide-white/10">
+                        <!-- Senarai Dinamik -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="w-full py-4 text-center text-xs text-blue-300/60">
+        &copy; 2026 Ustaz Joe Saan &bull; Pentaksiran Bahasa Arab Tahun 6 UASA
+    </footer>
+
+    <script>
+        // Web Audio API Sound Synthesizer
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            let now = audioCtx.currentTime;
+            if (type === 'correct') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.setValueAtTime(120, now + 0.15);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } else if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            }
+        }
+
+        // Background Music Loop
+        let bgMusicInterval = null;
+        let isMusicPlaying = false;
+        
+        function toggleBackgroundMusic() {
+            const icon = document.getElementById('musicIcon');
+            if (isMusicPlaying) {
+                clearInterval(bgMusicInterval);
+                isMusicPlaying = false;
+                icon.className = "fa-solid fa-music text-red-400";
+            } else {
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                isMusicPlaying = true;
+                icon.className = "fa-solid fa-music animate-pulse text-yellow-300";
+                
+                const notes = [261.63, 329.63, 392.00, 523.25, 392.00, 329.63];
+                let noteIndex = 0;
+                bgMusicInterval = setInterval(() => {
+                    if (!isMusicPlaying) return;
+                    try {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(notes[noteIndex], audioCtx.currentTime);
+                        gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.start();
+                        osc.stop(audioCtx.currentTime + 0.4);
+                        noteIndex = (noteIndex + 1) % notes.length;
+                    } catch(e) {}
+                }, 400);
+            }
+        }
+
+        // Soalan UASA Tahun 6 (Berdasarkan PDF penuh)
+        const questionsData = [
+            // Kerjaya & Alatan (SP 2.2.2)
+            { section: "Bahagian A (Kerjaya & Alatan)", instruction: "Apakah maksud perkataan Bahasa Arab berikut?", question: "صَيَّادُ", options: ["Nelayan / Pemancing", "Petani", "Doktor", "Pekerja"], answer: 0 },
+            { section: "Bahagian A (Kerjaya & Alatan)", instruction: "Apakah maksud perkataan Bahasa Arab berikut?", question: "مُشْطٌ", options: ["Cermin", "Sikat rambut", "Sabun", "Tuala"], answer: 1 },
+            { section: "Bahagian A (Kerjaya & Alatan)", instruction: "Apakah maksud perkataan Bahasa Arab berikut?", question: "طَبَّاخٌ", options: ["Juruterbang", "Tukang Masak / Chef", "Peniaga", "Polis"], answer: 1 },
+            { section: "Bahagian A (Kerjaya & Alatan)", instruction: "Apakah maksud perkataan Bahasa Arab berikut?", question: "مِرْآةٌ", options: ["Sikat", "Tuala", "Cermin", "Sabun"], answer: 2 },
+            { section: "Bahagian A (Kerjaya & Alatan)", instruction: "Apakah maksud perkataan Bahasa Arab berikut?", question: "فَلَّاحٌ", options: ["Petani", "Nelayan", "Guru", "Juruterbang"], answer: 0 },
+            
+            // Ejaan & Perkataan (SP 2.2.4)
+            { section: "Bahagian B (Ejaan & Perkataan)", instruction: "Pilih ejaan perkataan 'Polis' yang betul dalam Bahasa Arab:", question: "شُرْطِيٌّ", options: ["شُرْطِيٌّ", "شَرْطِيّ", "شُرط / ي", "شريطي"], answer: 0 },
+            { section: "Bahagian B (Ejaan & Perkataan)", instruction: "Pilih ejaan perkataan 'Tuala / Kain' yang betul:", question: "مِنْدِيلٌ", options: ["مِنْدِيلٌ", "مَنْدَل", "من / دي / ل", "مدين"], answer: 0 },
+            { section: "Bahagian B (Ejaan & Perkataan)", instruction: "Pilih ejaan perkataan 'Doktor' yang betul:", question: "طَبِيبٌ", options: ["طَبِيبٌ", "طبيب", "طب / يب", "طابوب"], answer: 0 },
+            { section: "Bahagian B (Ejaan & Perkataan)", instruction: "Pilih perkataan 'Sabun' yang tepat:", question: "صَابُونٌ", options: ["صَابُونٌ", "صَلَبُون", "صا / بو / ن", "صابين"], answer: 0 },
+            { section: "Bahagian B (Ejaan & Perkataan)", instruction: "Pilih ejaan perkataan 'Jurutera' yang betul:", question: "مُهَنْدِسٌ", options: ["مُهَنْدِسٌ", "مهندس", "م / هن / درس", "هندسة"], answer: 0 },
+
+            // Alatan Diri & Kosa Kata (SP 2.3.4 & 2.3.2)
+            { section: "Bahagian C (Alatan Diri)", instruction: "Pilih nama alatan penjagaan diri yang betul:", question: "مَعْجُونُ الأَسْنَانِ", options: ["Ubat gigi", "Pencuci rambut", "Pemotong kuku", "Tong sampah"], answer: 0 },
+            { section: "Bahagian C (Alatan Diri)", instruction: "Apakah nama alatan penjagaan rambut ini?", question: "دِهَانُ الشَّعْرِ", options: ["Minyak rambut / Pomade", "Sikat", "Tuala", "Sabun"], answer: 0 },
+            { section: "Bahagian C (Alatan Diri)", instruction: "Pilih jawapan bagi jururawat wanita:", question: "مُمَرِّضَةٌ", options: ["Jururawat (Perempuan)", "Doktor", "Penceramah", "Peniaga"], answer: 0 },
+            { section: "Bahagian C (Isim Isyarah / Jantina)", instruction: "Pilih kata tunjuk (Isim Isyarah) yang sesuai untuk 'تَاجِرَة' (Peniaga wanita):", question: "تَاجِرَةٌ ...", options: ["هَذِهِ", "هَذَا", "ذَلِكَ", "تِلْكَ"], answer: 0 },
+            { section: "Bahagian C (Isim Isyarah / Jantina)", instruction: "Pilih kata tunjuk yang sesuai untuk 'مِنْشَفَةٌ' (Tuala):", question: "... مِنْشَفَةٌ", options: ["تِلْكَ", "هَذَا", "ذَلِكَ", "هذاك"], answer: 0 },
+
+            // Ayat & Kata Kerja (SP 2.3.2, 2.3.3, 3.2.1)
+            { section: "Bahagian D (Ayat & Kata Kerja)", instruction: "Lengkapkan ayat: أَسْتَخْدِمُ ... (Saya menggunakan sikat)", question: "أَسْتَخْدِمُ ...", options: ["المُشْطَ", "المِنْشَفَةَ", "الصَّابُونَ", "المَاءَ"], answer: 0 },
+            { section: "Bahagian D (Ayat & Kata Kerja)", instruction: "Lengkapkan ayat: أُنْظِفُ يَدِي بِـ ... (Saya membersihkan tangan dengan sabun)", question: "أُنْظِفُ يَدِي بِـ ...", options: ["الصَّابُونِ", "المُشْطِ", "المِرْآةِ", "الشَّامْبُو"], answer: 0 },
+            { section: "Bahagian D (Ayat & Kata Kerja)", instruction: "Pilih warna tuala: لَوْنُ المِنْشَفَةِ ...", question: "لَوْنُ المِنْشَفَةِ ...", options: ["أَحْمَرُ (Merah)", "دَائِرِيٌّ", "مُرَبَّعٌ", "طويل"], answer: 0 },
+            { section: "Bahagian D (Ayat & Kata Kerja)", instruction: "Di manakah nelayan bekerja? الصَّيَّادُ يَعْمَلُ ...", question: "الصَّيَّادُ يَعْمَلُ ...", options: ["فِي البَحْرِ (Di laut)", "فِي المَدْرَسَةِ", "فِي المُسْتَشْفَى", "فِي المَطْعَمِ"], answer: 0 },
+            { section: "Bahagian D (Susunan Ayat)", instruction: "Susun ayat dengan betul: لَوْنُ - المُشْطِ - أَحْمَرُ", question: "رَتِّبْ الجُمْلَةَ السَّابِقَةَ", options: ["لَوْنُ المُشْطِ أَحْمَرُ", "المشط لون أحمر", "أحمر لون المشط", "لون أحمر المشط"], answer: 0 }
+        ];
+
+        let currentPlayer = { name: "", scoreClass: "" };
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let savedProgressData = null;
+
+        function handleRegister(e) {
+            e.preventDefault();
+            playSound('click');
+            const name = document.getElementById('inputName').value.trim();
+            const cls = document.getElementById('inputClass').value.trim();
+            
+            if(!name || !cls) return;
+
+            currentPlayer.name = name;
+            currentPlayer.scoreClass = cls;
+
+            document.getElementById('navPlayerName').innerText = `${name} (${cls})`;
+            document.getElementById('playerBadge').classList.remove('hidden');
+
+            const saved = localStorage.getItem(`uasa_arab_${name}_${cls}`);
+            if(saved) {
+                savedProgressData = JSON.parse(saved);
+                if(confirm("Terdapat rekod permainan yang belum selesai untuk anda. Adakah anda ingin sambung semula?")) {
+                    currentQuestionIndex = savedProgressData.index;
+                    score = savedProgressData.score;
+                } else {
+                    localStorage.removeItem(`uasa_arab_${name}_${cls}`);
+                    currentQuestionIndex = 0;
+                    score = 0;
+                }
+            } else {
+                currentQuestionIndex = 0;
+                score = 0;
+            }
+
+            document.getElementById('screen-register').classList.add('hidden');
+            document.getElementById('screen-menu').classList.remove('hidden');
+        }
+
+        function logoutPlayer() {
+            playSound('click');
+            document.getElementById('playerBadge').classList.add('hidden');
+            document.getElementById('screen-menu').classList.add('hidden');
+            document.getElementById('screen-register').classList.remove('hidden');
+        }
+
+        function startQuiz() {
+            playSound('click');
+            document.getElementById('screen-menu').classList.add('hidden');
+            document.getElementById('screen-game').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if(currentQuestionIndex >= questionsData.length) {
+                endQuiz();
+                return;
+            }
+
+            const q = questionsData[currentQuestionIndex];
+            document.getElementById('questionCategory').innerText = q.section;
+            document.getElementById('currentQNum').innerText = currentQuestionIndex + 1;
+            document.getElementById('totalQNum').innerText = questionsData.length;
+            document.getElementById('currentScore').innerText = score;
+            document.getElementById('questionInstruction').innerText = q.instruction;
+            document.getElementById('questionContent').innerText = q.question;
+
+            const progress = ((currentQuestionIndex) / questionsData.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+            
+            const feedbackBox = document.getElementById('feedbackBox');
+            feedbackBox.classList.add('hidden');
+
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = "bg-white/10 hover:bg-white/20 border border-white/20 p-4 rounded-2xl text-lg font-semibold transition transform hover:scale-[1.02] active:scale-95 text-center shadow-lg arabic-text";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(idx, q.answer, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, correctIndex, btnElement) {
+            const optionsContainer = document.getElementById('optionsContainer');
+            const buttons = optionsContainer.getElementsByTagName('button');
+            for(let b of buttons) b.disabled = true;
+
+            const feedbackBox = document.getElementById('feedbackBox');
+            feedbackBox.classList.remove('hidden');
+
+            if(selectedIndex === correctIndex) {
+                playSound('correct');
+                score += 5; // 20 soalan * 5 = 100 markah penuh
+                document.getElementById('currentScore').innerText = score;
+                btnElement.className = "bg-emerald-600 border border-emerald-400 p-4 rounded-2xl text-lg font-semibold text-white text-center shadow-lg arabic-text animate-pulse";
+                feedbackBox.className = "mt-6 p-4 rounded-2xl text-center font-bold text-lg bg-emerald-500/80 text-white border border-emerald-300";
+                feedbackBox.innerHTML = '<i class="fa-solid fa-circle-check mr-2"></i> Tahniah! Jawapan anda betul! ممتاز!';
+            } else {
+                playSound('wrong');
+                btnElement.className = "bg-red-600 border border-red-400 p-4 rounded-2xl text-lg font-semibold text-white text-center shadow-lg arabic-text";
+                buttons[correctIndex].className = "bg-emerald-600 border border-emerald-400 p-4 rounded-2xl text-lg font-semibold text-white text-center shadow-lg arabic-text animate-pulse";
+                
+                feedbackBox.className = "mt-6 p-4 rounded-2xl text-center font-bold text-lg bg-red-500/80 text-white border border-red-300";
+                feedbackBox.innerHTML = '<i class="fa-solid fa-circle-xmark mr-2"></i> Kurang tepat! Cuba lagi untuk soalan seterusnya.';
+            }
+
+            saveProgressToStorage();
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                loadQuestion();
+            }, 1800);
+        }
+
+        function saveProgressToStorage() {
+            if(!currentPlayer.name) return;
+            const data = {
+                index: currentQuestionIndex,
+                score: score
+            };
+            localStorage.setItem(`uasa_arab_${currentPlayer.name}_${currentPlayer.scoreClass}`, JSON.stringify(data));
+        }
+
+        function pauseGame() {
+            playSound('click');
+            saveProgressToStorage();
+            alert("Permainan diberhentikan dan markah anda telah disimpan! Anda boleh sambung semula pada bila-bila masa.");
+            document.getElementById('screen-game').classList.add('hidden');
+            document.getElementById('screen-menu').classList.remove('hidden');
+        }
+
+        function endQuiz() {
+            localStorage.removeItem(`uasa_arab_${currentPlayer.name}_${currentPlayer.scoreClass}`);
+
+            saveToLeaderboard({
+                name: currentPlayer.name,
+                className: currentPlayer.scoreClass,
+                score: score,
+                date: new Date().toLocaleDateString()
+            });
+
+            document.getElementById('screen-game').classList.add('hidden');
+            document.getElementById('screen-result').classList.remove('hidden');
+            document.getElementById('resName').innerText = currentPlayer.name;
+            document.getElementById('resClass').innerText = currentPlayer.scoreClass;
+            document.getElementById('resScore').innerText = `${score} / 100`;
+        }
+
+        function restartQuiz() {
+            playSound('click');
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById('screen-game').classList.remove('hidden');
+            loadQuestion();
+        }
+
+        function saveToLeaderboard(record) {
+            let leaderboard = JSON.parse(localStorage.getItem('uasa_arab_leaderboard') || '[]');
+            leaderboard.push(record);
+            leaderboard.sort((a, b) => b.score - a.score);
+            if(leaderboard.length > 15) leaderboard = leaderboard.slice(0, 15);
+            localStorage.setItem('uasa_arab_leaderboard', JSON.stringify(leaderboard));
+        }
+
+        function showLeaderboard() {
+            playSound('click');
+            const leaderboard = JSON.parse(localStorage.getItem('uasa_arab_leaderboard') || '[]');
+            const tbody = document.getElementById('leaderboardTableBody');
+            tbody.innerHTML = '';
+
+            if(leaderboard.length === 0) {
+                const tr = document.createElement('tr');
+                const td = document.createElement('td');
+                td.colSpan = 5;
+                td.className = "p-6 text-center text-blue-200";
+                td.innerText = "Belum ada sebarang rekod markah lagi. Jadilah yang pertama!";
+                tr.appendChild(td);
+                tbody.appendChild(tr);
+            } else {
+                leaderboard.forEach((item, idx) => {
+                    let rankBadge = `<span class="font-bold text-white">${idx+1}</span>`;
+                    if(idx === 0) rankBadge = `<span class="bg-yellow-400 text-indigo-950 font-black px-2.5 py-1 rounded-full text-xs">🥇 1</span>`;
+                    else if(idx === 1) rankBadge = `<span class="bg-slate-300 text-indigo-950 font-black px-2.5 py-1 rounded-full text-xs">🥈 2</span>`;
+                    else if(idx === 2) rankBadge = `<span class="bg-amber-600 text-white font-black px-2.5 py-1 rounded-full text-xs">🥉 3</span>`;
+
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-white/5 transition border-b border-white/5";
+                    tr.innerHTML = `
+                        <td class="p-3 text-center">${rankBadge}</td>
+                        <td class="p-3 font-semibold text-white">${item.name}</td>
+                        <td class="p-3 text-blue-200">${item.className}</td>
+                        <td class="p-3 text-center font-bold text-yellow-300">${item.score} / 100</td>
+                        <td class="p-3 text-center text-xs text-blue-300">${item.date}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            document.getElementById('screen-register').classList.add('hidden');
+            document.getElementById('screen-menu').classList.add('hidden');
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById('screen-leaderboard').classList.remove('hidden');
+        }
+
+        function backToMenu() {
+            playSound('click');
+            document.getElementById('screen-leaderboard').classList.add('hidden');
+            if(currentPlayer.name) {
+                document.getElementById('screen-menu').classList.remove('hidden');
+            } else {
+                document.getElementById('screen-register').classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
